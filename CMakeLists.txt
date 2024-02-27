@@ -20,6 +20,8 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/include
 )
 
+
+
 # Automatically add all .c files in the src directory
 file(GLOB SRC_FILES "${CMAKE_SOURCE_DIR}/src/*.c")
 
@@ -29,6 +31,15 @@ add_executable(room-sensor
     ${SRC_FILES}
 )
 
+set(ENABLE_CJSON_TEST Off)
+set(ENABLE_CJSON_UTILS Off)
+
+add_subdirectory(libs/cJSON)
+target_include_directories(room-sensor PRIVATE include libs/cJSON)
+
+# add nanopb
+add_subdirectory(libs/nanopb)
+target_include_directories(room-sensor PRIVATE include libs/nanopb)
 
 target_link_libraries(room-sensor 
     pico_stdlib 
@@ -36,7 +47,10 @@ target_link_libraries(room-sensor
     hardware_adc
     pico_cyw43_arch_lwip_threadsafe_background
     pico_lwip_mqtt
+    cjson
+    protobuf-nanopb
 )
+
 
 # Enable stdio_usb for serial output and stdio_uart for UART output if needed
 pico_enable_stdio_usb(room-sensor 1)

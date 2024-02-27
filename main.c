@@ -68,9 +68,7 @@ int main() {
   };
 
   while (true) {
-
     room_sensor_loop(&sensor);
-
     sleep_ms(1000);
   }
 }
