@@ -1,3 +1,4 @@
 include/secrets.h
 build/
 .vscode/
+env/
