@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-message Reading {
-    float temperature = 1;
-    string unit = 2;
-    float humidity = 3;
-}

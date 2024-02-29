@@ -2,6 +2,8 @@
 
 #include "hardware/i2c.h"
 
+#define SENSOR_ADDR 0x40
+
 //define the enum for the si7021 error states
 typedef enum {
     SI7021_OK,
@@ -14,7 +16,6 @@ typedef enum {
 
 typedef struct si7021 {
     i2c_inst_t *i2c;
-    uint8_t addr;
 } si7021_t;
 
 typedef struct {

@@ -18,12 +18,9 @@ si7021_error_t si7021_init(si7021_t *sensor) {
     if (sensor->i2c == NULL) {
         return SI7021_ERR_NO_I2C;
     }
-    if (sensor->addr < 0x40 || sensor->addr > 0x7F) {
-        return SI7021_ERR_INVALID_ADDR;
-    }
 
     uint8_t read_buffer[1] = {0};
-    int num_bytes = i2c_read_blocking(sensor->i2c, sensor->addr, read_buffer, 1, false);
+    int num_bytes = i2c_read_blocking(i2c0, 0x40, read_buffer, 1, false);
 
     if (num_bytes != 1) {
         return SI7021_ERR_NO_RESPONSE;
@@ -34,13 +31,13 @@ si7021_error_t si7021_init(si7021_t *sensor) {
 
 si7021_error_t write_then_read(si7021_t *sensor, uint8_t command, uint16_t *result) {
     uint8_t read_buffer[2] = {0, 0};
-    int num_bytes = i2c_write_blocking(sensor->i2c, sensor->addr, &command, 1, false);
+    int num_bytes = i2c_write_blocking(sensor->i2c, SENSOR_ADDR, &command, 1, false);
 
     if (num_bytes != 1) {
         return SI7021_ERR_WRITE_FAIL;
     }
 
-    num_bytes = i2c_read_blocking(sensor->i2c, sensor->addr, read_buffer, 2, false);
+    num_bytes = i2c_read_blocking(sensor->i2c, SENSOR_ADDR, read_buffer, 2, false);
 
     if (num_bytes != 2) {
         return SI7021_ERR_READ_FAIL;
@@ -74,7 +71,7 @@ si7021_error_t read_humidity(si7021_t *sensor, si7021_reading_t *reading) {
     }
 
     // convert the humidity code to a percentage and store in the new reading
-    reading->humidity = (175.72 * hum_code / 65536) - 46.85;
+    reading->humidity = (125 * hum_code / 65536) - 6;
     return SI7021_OK;
 }
 
